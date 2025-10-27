@@ -99,7 +99,7 @@
   padding: 0.25rem 0.6rem;
   border-radius: 999px;
   background: rgba(9, 11, 26, 0.8);
-  animation: floatPulse 0.9s ease forwards;
+  animation: floatPulse 5.9s ease forwards;
   pointer-events: none;
 }
 
@@ -116,18 +116,21 @@
 @keyframes floatPulse {
   0% {
     opacity: 0;
-    transform: translateY(-50%) translateX(0);
+    transform: translateY(-150%) translateX(0);
   }
+
   20% {
     opacity: 1;
-    transform: translateY(-60%) translateX(-4px);
+    transform: translateY(-160%) translateX(-4px);
   }
+
   80% {
     opacity: 1;
-    transform: translateY(-70%) translateX(4px);
+    transform: translateY(-170%) translateX(4px);
   }
+
   100% {
     opacity: 0;
-    transform: translateY(-80%) translateX(0);
+    transform: translateY(-180%) translateX(0);
   }
 }
