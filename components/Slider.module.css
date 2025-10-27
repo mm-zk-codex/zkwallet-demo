@@ -1,16 +1,17 @@
 .wrapper {
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
+  gap: 0.9rem;
 }
 
 .header {
   display: flex;
   justify-content: space-between;
-  font-size: 0.75rem;
+  font-size: 0.85rem;
   text-transform: uppercase;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.16em;
   color: var(--text-muted);
+  font-weight: 600;
 }
 
 .slider {
@@ -22,21 +23,22 @@
 .presets {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.5rem;
+  gap: 0.65rem;
 }
 
 .preset,
 .presetActive {
-  background: transparent;
-  border: 1px solid var(--panel-border);
-  border-radius: 12px;
-  padding: 0.3rem 0.75rem;
+  background: rgba(22, 28, 54, 0.75);
+  border: 1px solid rgba(124, 154, 255, 0.45);
+  border-radius: 14px;
+  padding: 0.4rem 0.95rem;
   color: var(--text-muted);
   cursor: pointer;
-  font-size: 0.7rem;
+  font-size: 0.78rem;
   text-transform: uppercase;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.14em;
   transition: all 0.2s ease;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.05);
 }
 
 .preset:hover,
@@ -46,5 +48,5 @@
 }
 
 .presetActive {
-  background: rgba(98, 241, 255, 0.1);
+  background: rgba(102, 247, 255, 0.14);
 }
