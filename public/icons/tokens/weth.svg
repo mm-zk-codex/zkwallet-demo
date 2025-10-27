@@ -1,0 +1,13 @@
+<svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <circle cx="32" cy="32" r="28" fill="#131424" />
+  <circle cx="32" cy="32" r="26" fill="#1F2542" />
+  <path d="M32 12.5L42.2 32L32 37.8L21.8 32L32 12.5Z" fill="#FFFFFF" opacity="0.85" />
+  <path d="M32 51.5L21.8 33.5L32 39.5L42.2 33.5L32 51.5Z" fill="#FFFFFF" opacity="0.65" />
+  <circle cx="32" cy="32" r="12.8" fill="url(#gradWeth)" stroke="#FFFFFF" stroke-width="2" />
+  <defs>
+    <radialGradient id="gradWeth" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(32 32) scale(12.8)">
+      <stop stop-color="#FF67F9" />
+      <stop offset="1" stop-color="#6456FF" />
+    </radialGradient>
+  </defs>
+</svg>

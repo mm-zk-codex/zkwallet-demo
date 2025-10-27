@@ -42,11 +42,20 @@
   width: 3.4rem;
   height: 3.4rem;
   border-radius: 18px;
-  display: grid;
-  place-items: center;
-  font-size: 1.8rem;
-  background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.25), rgba(110, 138, 255, 0.3));
-  box-shadow: inset 0 0 8px rgba(255, 255, 255, 0.1), 0 10px 20px rgba(34, 45, 94, 0.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+  background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.25), rgba(110, 138, 255, 0.24));
+  box-shadow: inset 0 0 8px rgba(255, 255, 255, 0.12), 0 10px 20px rgba(34, 45, 94, 0.35);
+}
+
+.iconImage {
+  width: 70%;
+  height: 70%;
+  object-fit: contain;
+  filter: drop-shadow(0 4px 10px rgba(12, 14, 32, 0.45));
 }
 
 .meta {

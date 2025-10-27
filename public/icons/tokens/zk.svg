@@ -1,0 +1,11 @@
+<svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <circle cx="32" cy="32" r="28" fill="#120B24" />
+  <circle cx="32" cy="32" r="26" fill="#271D4F" />
+  <path d="M19 21H45V27L33.4 38.6L45 38.6V43H19V37.2L30.6 25.4H19V21Z" fill="url(#gradZk)" />
+  <defs>
+    <linearGradient id="gradZk" x1="19" y1="21" x2="45" y2="43" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#61F9FF" />
+      <stop offset="1" stop-color="#6D65FF" />
+    </linearGradient>
+  </defs>
+</svg>

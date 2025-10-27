@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import styles from "./page.module.css";
 import { ChainPanel } from "@/components/ChainPanel";
 import { ExchangeBoard } from "@/components/ExchangeBoard";
@@ -20,6 +20,11 @@ import { loadProfile, persistProfile, ProfileState } from "@/lib/cookie";
 type DragContext = {
   chain: ChainConfig;
   token: TokenConfig;
+};
+
+type DeltaIndicator = {
+  amount: number;
+  direction: "in" | "out";
 };
 
 type PendingAction =
@@ -83,6 +88,9 @@ export default function Home() {
   const [percentage, setPercentage] = useState(50);
   const [selectedRouteId, setSelectedRouteId] = useState<string | null>(null);
   const [feedback, setFeedback] = useState("Forge your multi-chain strategy.");
+  const [deltaIndicators, setDeltaIndicators] = useState<Record<string, DeltaIndicator>>({});
+  const [isResolving, setIsResolving] = useState(false);
+  const deltaTimeouts = useRef<ReturnType<typeof setTimeout>[]>([]);
 
   useEffect(() => {
     if (typeof window === "undefined") {
@@ -98,6 +106,13 @@ export default function Home() {
     }
   }, []);
 
+  useEffect(() => {
+    return () => {
+      deltaTimeouts.current.forEach((timeout) => clearTimeout(timeout));
+      deltaTimeouts.current = [];
+    };
+  }, []);
+
   const balances = profile?.balances ?? {};
 
   const handleUpdateProfile = (updater: (current: ProfileState) => ProfileState) => {
@@ -109,6 +124,52 @@ export default function Home() {
     });
   };
 
+  const applyProfileMutation = (mutator: (draft: ProfileState) => void) => {
+    handleUpdateProfile((draft) => {
+      const clone: ProfileState = {
+        address: draft.address,
+        balances: JSON.parse(JSON.stringify(draft.balances)),
+        lastUpdated: Date.now()
+      };
+      mutator(clone);
+      return clone;
+    });
+  };
+
+  const queueDeltaTransition = (
+    entries: { chainId: string; tokenId: string; amount: number; direction: "in" | "out" }[],
+    mutator: (state: ProfileState) => void
+  ) => {
+    if (entries.length === 0) {
+      applyProfileMutation(mutator);
+      return;
+    }
+    setIsResolving(true);
+    setDeltaIndicators((prev) => {
+      const next = { ...prev };
+      entries.forEach((entry) => {
+        next[`${entry.chainId}:${entry.tokenId}`] = {
+          amount: Number(entry.amount.toFixed(4)),
+          direction: entry.direction
+        };
+      });
+      return next;
+    });
+    const timeout = setTimeout(() => {
+      applyProfileMutation(mutator);
+      setDeltaIndicators((prev) => {
+        const next = { ...prev };
+        entries.forEach((entry) => {
+          delete next[`${entry.chainId}:${entry.tokenId}`];
+        });
+        return next;
+      });
+      setIsResolving(false);
+      deltaTimeouts.current = deltaTimeouts.current.filter((item) => item !== timeout);
+    }, 900);
+    deltaTimeouts.current.push(timeout);
+  };
+
   const handleTokenDragStart = (chainId: string, token: TokenConfig) => {
     const chain = CHAINS.find((item) => item.id === chainId);
     if (!chain) {
@@ -118,9 +179,11 @@ export default function Home() {
     setFeedback(`Holding ${token.symbol} on ${chain.name}`);
   };
 
-  const resetDragContext = () => {
+  const resetDragContext = (options?: { preserveFeedback?: boolean }) => {
     setDragContext(null);
-    setFeedback("Forge your multi-chain strategy.");
+    if (!options?.preserveFeedback) {
+      setFeedback("Forge your multi-chain strategy.");
+    }
   };
 
   const handleChainDrop = (targetChainId: string) => {
@@ -200,22 +263,14 @@ export default function Home() {
     if (!profile || !pendingAction) {
       return;
     }
+    if (isResolving) {
+      setFeedback("Hold tight—last transfer is still shimmering.");
+      return;
+    }
     if (currentAmount <= 0) {
       setFeedback("Select an amount greater than zero.");
       return;
     }
-
-    const applyMutation = (mutator: (draft: ProfileState) => void) => {
-      handleUpdateProfile((draft) => {
-        const clone: ProfileState = {
-          address: draft.address,
-          balances: JSON.parse(JSON.stringify(draft.balances)),
-          lastUpdated: Date.now()
-        };
-        mutator(clone);
-        return clone;
-      });
-    };
 
     if (pendingAction.type === "transfer") {
       const { source, targetChain } = pendingAction;
@@ -228,28 +283,47 @@ export default function Home() {
         setFeedback(`${targetChain.name} has no vault slot for ${source.token.symbol}.`);
         return;
       }
-      applyMutation((state) => {
-        const sourceBalance = state.balances[source.chain.id][source.token.id];
-        const amount = Math.min(currentAmount, sourceBalance);
-        state.balances[source.chain.id][source.token.id] = Number(
-          (sourceBalance - amount).toFixed(2)
-        );
-        const existing = state.balances[targetChain.id][source.token.id] ?? 0;
-        state.balances[targetChain.id][source.token.id] = Number((existing + amount).toFixed(2));
-      });
-      setFeedback(`Moved ${currentAmount} ${source.token.symbol} to ${targetChain.name}.`);
+      const sourceBalance = profile.balances[source.chain.id]?.[source.token.id] ?? 0;
+      const amount = Math.min(currentAmount, sourceBalance);
+      if (amount <= 0) {
+        setFeedback(`No ${source.token.symbol} left to move from ${source.chain.name}.`);
+        return;
+      }
+      queueDeltaTransition(
+        [
+          { chainId: source.chain.id, tokenId: source.token.id, amount, direction: "out" },
+          { chainId: targetChain.id, tokenId: source.token.id, amount, direction: "in" }
+        ],
+        (state) => {
+          const available = state.balances[source.chain.id][source.token.id];
+          const resolvedAmount = Math.min(amount, available);
+          state.balances[source.chain.id][source.token.id] = Number(
+            (available - resolvedAmount).toFixed(2)
+          );
+          const existing = state.balances[targetChain.id][source.token.id] ?? 0;
+          state.balances[targetChain.id][source.token.id] = Number(
+            (existing + resolvedAmount).toFixed(2)
+          );
+        }
+      );
+      setFeedback(`Moved ${amount.toFixed(2)} ${source.token.symbol} to ${targetChain.name}.`);
     }
 
     if (pendingAction.type === "deposit") {
       const { source, exchange } = pendingAction;
-      applyMutation((state) => {
-        const sourceBalance = state.balances[source.chain.id][source.token.id];
-        const amount = Math.min(currentAmount, sourceBalance);
-        state.balances[source.chain.id][source.token.id] = Number(
-          (sourceBalance - amount).toFixed(2)
-        );
+      const sourceBalance = profile.balances[source.chain.id]?.[source.token.id] ?? 0;
+      const amount = Math.min(currentAmount, sourceBalance);
+      if (amount <= 0) {
+        setFeedback(`No ${source.token.symbol} left to send from ${source.chain.name}.`);
+        setPendingAction(null);
+        resetDragContext({ preserveFeedback: true });
+        return;
+      }
+      applyProfileMutation((state) => {
+        const existing = state.balances[source.chain.id][source.token.id];
+        state.balances[source.chain.id][source.token.id] = Number((existing - amount).toFixed(2));
       });
-      setFeedback(`Deposited ${currentAmount} ${pendingAction.source.token.symbol} to ${exchange.name}.`);
+      setFeedback(`Deposited ${amount.toFixed(2)} ${pendingAction.source.token.symbol} to ${exchange.name}.`);
     }
 
     if (pendingAction.type === "swap") {
@@ -262,25 +336,40 @@ export default function Home() {
         setFeedback(`${target.chain.name} has no inventory slot for ${target.token.symbol}.`);
         return;
       }
-      applyMutation((state) => {
-        const sourceBalance = state.balances[source.chain.id][source.token.id];
-        const amount = Math.min(currentAmount, sourceBalance);
-        const payout = Number((amount * effectiveRate).toFixed(2));
-        state.balances[source.chain.id][source.token.id] = Number(
-          (sourceBalance - amount).toFixed(2)
-        );
-        const existing = state.balances[target.chain.id][target.token.id] ?? 0;
-        state.balances[target.chain.id][target.token.id] = Number((existing + payout).toFixed(2));
-      });
+      const sourceBalance = profile.balances[source.chain.id]?.[source.token.id] ?? 0;
+      const amount = Math.min(currentAmount, sourceBalance);
+      if (amount <= 0) {
+        setFeedback(`No ${source.token.symbol} available to swap right now.`);
+        return;
+      }
+      const payout = Number((amount * effectiveRate).toFixed(2));
+      queueDeltaTransition(
+        [
+          { chainId: source.chain.id, tokenId: source.token.id, amount, direction: "out" },
+          { chainId: target.chain.id, tokenId: target.token.id, amount: payout, direction: "in" }
+        ],
+        (state) => {
+          const available = state.balances[source.chain.id][source.token.id];
+          const resolvedAmount = Math.min(amount, available);
+          const resolvedPayout = Number((resolvedAmount * effectiveRate).toFixed(2));
+          state.balances[source.chain.id][source.token.id] = Number(
+            (available - resolvedAmount).toFixed(2)
+          );
+          const existing = state.balances[target.chain.id][target.token.id] ?? 0;
+          state.balances[target.chain.id][target.token.id] = Number(
+            (existing + resolvedPayout).toFixed(2)
+          );
+        }
+      );
       setFeedback(
-        `Swapped ${currentAmount} ${source.token.symbol} for ${(currentAmount * effectiveRate).toFixed(
-          2
-        )} ${target.token.symbol} via ${routeLabel}.`
+        `Swapped ${amount.toFixed(2)} ${source.token.symbol} for ${(amount * effectiveRate).toFixed(2)} ${
+          target.token.symbol
+        } via ${routeLabel}.`
       );
     }
 
     setPendingAction(null);
-    resetDragContext();
+    resetDragContext({ preserveFeedback: true });
   };
 
   const closeModal = () => {
@@ -314,6 +403,7 @@ export default function Home() {
               key={chain.id}
               chain={chain}
               balances={balances[chain.id] ?? {}}
+              deltas={deltaIndicators}
               onTokenDragStart={handleTokenDragStart}
               onTokenDragEnd={resetDragContext}
               onChainDrop={handleChainDrop}

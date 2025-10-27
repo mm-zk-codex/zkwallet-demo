@@ -1,12 +1,19 @@
 "use client";
 
+import Image from "next/image";
 import { TokenConfig } from "@/config/chains";
 import styles from "./TokenCard.module.css";
+
+type DeltaIndicator = {
+  amount: number;
+  direction: "in" | "out";
+};
 
 export type TokenCardProps = {
   chainId: string;
   token: TokenConfig;
   balance: number;
+  delta?: DeltaIndicator;
   onDragStart: (token: TokenConfig) => void;
   onDragEnd: () => void;
   onDropToken: () => void;
@@ -16,6 +23,7 @@ export function TokenCard({
   chainId,
   token,
   balance,
+  delta,
   onDragStart,
   onDragEnd,
   onDropToken
@@ -45,12 +53,26 @@ export function TokenCard({
         onDropToken();
       }}
     >
-      <div className={styles.avatar}>{token.icon}</div>
+      <div className={styles.avatar}>
+        <Image src={token.icon} alt={`${token.symbol} icon`} width={44} height={44} className={styles.avatarImage} />
+      </div>
       <div className={styles.meta}>
         <span className={styles.symbol}>{token.symbol}</span>
         <span className={styles.name}>{token.name}</span>
       </div>
       <div className={styles.balance}>{formattedBalance}</div>
+      {delta ? (
+        <div
+          className={`${styles.delta} ${
+            delta.direction === "in" ? styles.deltaIn : styles.deltaOut
+          }`}
+        >
+          {delta.direction === "in" ? "+" : "-"}
+          {Math.abs(delta.amount).toLocaleString(undefined, {
+            maximumFractionDigits: delta.amount < 1 ? 4 : 2
+          })}
+        </div>
+      ) : null}
     </div>
   );
 }

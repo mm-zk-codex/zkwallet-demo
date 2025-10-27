@@ -31,28 +31,156 @@ export type ExchangeConfig = {
 
 export const CHAINS: ChainConfig[] = [
   {
-    id: "eth",
-    name: "Ethereum",
-    icon: "\u269b\ufe0f",
-    themeColor: "#627eea",
+    id: "era",
+    name: "zkSync Era",
+    icon: "/icons/chains/zksync-era.svg",
+    themeColor: "#7a4bff",
     tokens: [
       {
         id: "eth",
         name: "Ether",
         symbol: "ETH",
-        icon: "\u26a1\ufe0f",
-        transferableTo: ["zksync", "polygon"],
+        icon: "/icons/tokens/eth.svg",
+        transferableTo: ["sophon", "abstract", "edge"],
         swapRoutes: [
           {
-            id: "eth-usdc",
-            label: "Uniswap v3",
-            path: ["ETH", "USDC"],
-            rate: 3275.43
+            id: "era-eth-weth",
+            label: "Mute Switch",
+            path: ["ETH", "WETH"],
+            rate: 1
           },
           {
-            id: "eth-dai",
-            label: "1inch Aggregation",
-            path: ["ETH", "DAI"],
+            id: "era-eth-usdc",
+            label: "SyncSwap",
+            path: ["ETH", "USDC"],
+            rate: 3271.42
+          }
+        ]
+      },
+      {
+        id: "weth",
+        name: "Wrapped Ether",
+        symbol: "WETH",
+        icon: "/icons/tokens/weth.svg",
+        transferableTo: ["sophon", "abstract"],
+        swapRoutes: [
+          {
+            id: "era-weth-eth",
+            label: "Velocore",
+            path: ["WETH", "ETH"],
+            rate: 0.999
+          },
+          {
+            id: "era-weth-zk",
+            label: "SpaceFi",
+            path: ["WETH", "ZK"],
+            rate: 1823.4
+          }
+        ]
+      },
+      {
+        id: "usdc",
+        name: "USD Coin",
+        symbol: "USDC",
+        icon: "/icons/tokens/usdc.svg",
+        transferableTo: ["sophon", "abstract", "edge"],
+        swapRoutes: [
+          {
+            id: "era-usdc-eth",
+            label: "Curve Stable",
+            path: ["USDC", "ETH"],
+            rate: 0.0003
+          },
+          {
+            id: "era-usdc-meow",
+            label: "SyncSwap",
+            path: ["USDC", "MEOW"],
+            rate: 5120.78
+          }
+        ]
+      },
+      {
+        id: "zk",
+        name: "ZK Token",
+        symbol: "ZK",
+        icon: "/icons/tokens/zk.svg",
+        transferableTo: ["sophon", "edge"],
+        swapRoutes: [
+          {
+            id: "era-zk-eth",
+            label: "Mute Switch",
+            path: ["ZK", "ETH"],
+            rate: 0.00054
+          },
+          {
+            id: "era-zk-meow",
+            label: "SpaceFi",
+            path: ["ZK", "MEOW"],
+            rate: 27.45
+          }
+        ]
+      },
+      {
+        id: "meow",
+        name: "Meow",
+        symbol: "MEOW",
+        icon: "/icons/tokens/meow.svg",
+        transferableTo: ["sophon"],
+        swapRoutes: [
+          {
+            id: "era-meow-usdc",
+            label: "ClawSwap",
+            path: ["MEOW", "USDC"],
+            rate: 0.00018
+          }
+        ]
+      }
+    ]
+  },
+  {
+    id: "sophon",
+    name: "Sophon",
+    icon: "/icons/chains/sophon.svg",
+    themeColor: "#12b3ff",
+    tokens: [
+      {
+        id: "eth",
+        name: "Ether",
+        symbol: "ETH",
+        icon: "/icons/tokens/eth.svg",
+        transferableTo: ["era", "abstract", "edge"],
+        swapRoutes: [
+          {
+            id: "sophon-eth-weth",
+            label: "Lynex",
+            path: ["ETH", "WETH"],
+            rate: 1
+          },
+          {
+            id: "sophon-eth-zk",
+            label: "Sophon Portal",
+            path: ["ETH", "ZK"],
+            rate: 1876.9
+          }
+        ]
+      },
+      {
+        id: "weth",
+        name: "Wrapped Ether",
+        symbol: "WETH",
+        icon: "/icons/tokens/weth.svg",
+        transferableTo: ["era", "abstract"],
+        swapRoutes: [
+          {
+            id: "sophon-weth-eth",
+            label: "Lynex",
+            path: ["WETH", "ETH"],
+            rate: 0.999
+          },
+          {
+            id: "sophon-weth-usdc",
+            label: "SyncSwap",
+            path: ["WETH", "USDC"],
             rate: 3268.11
           }
         ]
@@ -61,58 +189,135 @@ export const CHAINS: ChainConfig[] = [
         id: "usdc",
         name: "USD Coin",
         symbol: "USDC",
-        icon: "\ud83d\udcb5",
-        transferableTo: ["zksync", "polygon", "bsc"],
+        icon: "/icons/tokens/usdc.svg",
+        transferableTo: ["era", "abstract"],
         swapRoutes: [
           {
-            id: "usdc-eth",
+            id: "sophon-usdc-eth",
+            label: "Curve Stable",
+            path: ["USDC", "ETH"],
+            rate: 0.00031
+          }
+        ]
+      },
+      {
+        id: "zk",
+        name: "ZK Token",
+        symbol: "ZK",
+        icon: "/icons/tokens/zk.svg",
+        transferableTo: ["era", "edge"],
+        swapRoutes: [
+          {
+            id: "sophon-zk-eth",
+            label: "Sophon Portal",
+            path: ["ZK", "ETH"],
+            rate: 0.00052
+          }
+        ]
+      },
+      {
+        id: "meow",
+        name: "Meow",
+        symbol: "MEOW",
+        icon: "/icons/tokens/meow.svg",
+        transferableTo: ["era"],
+        swapRoutes: [
+          {
+            id: "sophon-meow-usdc",
+            label: "ClawSwap",
+            path: ["MEOW", "USDC"],
+            rate: 0.00019
+          }
+        ]
+      }
+    ]
+  },
+  {
+    id: "abstract",
+    name: "Abstract",
+    icon: "/icons/chains/abstract.svg",
+    themeColor: "#ff8a65",
+    tokens: [
+      {
+        id: "eth",
+        name: "Ether",
+        symbol: "ETH",
+        icon: "/icons/tokens/eth.svg",
+        transferableTo: ["era", "sophon"],
+        swapRoutes: [
+          {
+            id: "abstract-eth-usdc",
+            label: "Abstract Swap",
+            path: ["ETH", "USDC"],
+            rate: 3270.05
+          }
+        ]
+      },
+      {
+        id: "weth",
+        name: "Wrapped Ether",
+        symbol: "WETH",
+        icon: "/icons/tokens/weth.svg",
+        transferableTo: ["era", "sophon"],
+        swapRoutes: [
+          {
+            id: "abstract-weth-eth",
+            label: "Abstract Swap",
+            path: ["WETH", "ETH"],
+            rate: 0.999
+          }
+        ]
+      },
+      {
+        id: "usdc",
+        name: "USD Coin",
+        symbol: "USDC",
+        icon: "/icons/tokens/usdc.svg",
+        transferableTo: ["era", "sophon", "edge"],
+        swapRoutes: [
+          {
+            id: "abstract-usdc-eth",
             label: "Curve Stable",
             path: ["USDC", "ETH"],
             rate: 0.0003
-          },
-          {
-            id: "usdc-dai",
-            label: "Curve 3pool",
-            path: ["USDC", "DAI"],
-            rate: 0.998
           }
         ]
       },
       {
-        id: "dai",
-        name: "Dai",
-        symbol: "DAI",
-        icon: "\ud83d\udcb0",
-        transferableTo: ["polygon"],
+        id: "zk",
+        name: "ZK Token",
+        symbol: "ZK",
+        icon: "/icons/tokens/zk.svg",
+        transferableTo: ["era"],
         swapRoutes: [
           {
-            id: "dai-usdt",
-            label: "Balancer",
-            path: ["DAI", "USDT"],
-            rate: 0.999
+            id: "abstract-zk-eth",
+            label: "Abstract Swap",
+            path: ["ZK", "ETH"],
+            rate: 0.0005
           }
         ]
       }
     ]
   },
   {
-    id: "zksync",
-    name: "zkSync Era",
-    icon: "\ud83d\udd2e",
-    themeColor: "#9a6bff",
+    id: "edge",
+    name: "zkSync Edge",
+    icon: "/icons/chains/edge.svg",
+    themeColor: "#5ce3a9",
     tokens: [
       {
         id: "eth",
-        name: "Wrapped Ether",
+        name: "Ether",
         symbol: "ETH",
-        icon: "\ud83d\udd25",
-        transferableTo: ["eth", "polygon"],
+        icon: "/icons/tokens/eth.svg",
+        transferableTo: ["era", "sophon"],
         swapRoutes: [
           {
-            id: "eth-usdc-zk",
-            label: "SyncSwap",
+            id: "edge-eth-usdc",
+            label: "Edge Portal",
             path: ["ETH", "USDC"],
-            rate: 3271.78
+            rate: 3271.88
           }
         ]
       },
@@ -120,150 +325,29 @@ export const CHAINS: ChainConfig[] = [
         id: "usdc",
         name: "USD Coin",
         symbol: "USDC",
-        icon: "\ud83d\udcb8",
-        transferableTo: ["eth", "polygon"],
+        icon: "/icons/tokens/usdc.svg",
+        transferableTo: ["era", "sophon", "abstract"],
         swapRoutes: [
           {
-            id: "usdc-eth-zk",
-            label: "SyncSwap",
+            id: "edge-usdc-eth",
+            label: "Edge Portal",
             path: ["USDC", "ETH"],
             rate: 0.00031
           }
         ]
       },
       {
-        id: "link",
-        name: "Chainlink",
-        symbol: "LINK",
-        icon: "\ud83d\udd17",
-        transferableTo: ["eth"],
+        id: "zk",
+        name: "ZK Token",
+        symbol: "ZK",
+        icon: "/icons/tokens/zk.svg",
+        transferableTo: ["era", "sophon"],
         swapRoutes: [
           {
-            id: "link-eth",
-            label: "Mutant Swap",
-            path: ["LINK", "ETH"],
-            rate: 0.0051
-          }
-        ]
-      }
-    ]
-  },
-  {
-    id: "polygon",
-    name: "Polygon",
-    icon: "\ud83d\udd38",
-    themeColor: "#8247e5",
-    tokens: [
-      {
-        id: "eth",
-        name: "Bridged Ether",
-        symbol: "ETH",
-        icon: "\ud83d\udd25",
-        transferableTo: ["eth", "zksync"],
-        swapRoutes: [
-          {
-            id: "eth-usdc-poly",
-            label: "Uniswap",
-            path: ["ETH", "USDC"],
-            rate: 3270.12
-          }
-        ]
-      },
-      {
-        id: "matic",
-        name: "MATIC",
-        symbol: "MATIC",
-        icon: "\ud83c\udf52",
-        transferableTo: ["eth"],
-        swapRoutes: [
-          {
-            id: "matic-eth",
-            label: "Quickswap",
-            path: ["MATIC", "ETH"],
-            rate: 0.00043
-          }
-        ]
-      },
-      {
-        id: "usdc",
-        name: "USD Coin",
-        symbol: "USDC",
-        icon: "\ud83d\udcb6",
-        transferableTo: ["eth", "zksync", "bsc"],
-        swapRoutes: [
-          {
-            id: "usdc-usdt-poly",
-            label: "Uniswap",
-            path: ["USDC", "USDT"],
-            rate: 0.999
-          }
-        ]
-      },
-      {
-        id: "dai",
-        name: "Dai",
-        symbol: "DAI",
-        icon: "\ud83c\udf4a",
-        transferableTo: ["eth"],
-        swapRoutes: [
-          {
-            id: "dai-eth-poly",
-            label: "Kyber",
-            path: ["DAI", "ETH"],
-            rate: 0.00031
-          }
-        ]
-      }
-    ]
-  },
-  {
-    id: "bsc",
-    name: "BNB Chain",
-    icon: "\ud83d\udd2b",
-    themeColor: "#f0b90b",
-    tokens: [
-      {
-        id: "usdc",
-        name: "USD Coin",
-        symbol: "USDC",
-        icon: "\ud83d\udcb5",
-        transferableTo: ["eth", "polygon"],
-        swapRoutes: [
-          {
-            id: "usdc-busd-bsc",
-            label: "PancakeSwap",
-            path: ["USDC", "BUSD"],
-            rate: 1
-          }
-        ]
-      },
-      {
-        id: "bnb",
-        name: "BNB",
-        symbol: "BNB",
-        icon: "\ud83d\udd25",
-        transferableTo: [],
-        swapRoutes: [
-          {
-            id: "bnb-busd",
-            label: "PancakeSwap",
-            path: ["BNB", "BUSD"],
-            rate: 571.12
-          }
-        ]
-      },
-      {
-        id: "busd",
-        name: "BUSD",
-        symbol: "BUSD",
-        icon: "\ud83d\udcb7",
-        transferableTo: ["polygon"],
-        swapRoutes: [
-          {
-            id: "busd-usdc",
-            label: "PancakeSwap",
-            path: ["BUSD", "USDC"],
-            rate: 1
+            id: "edge-zk-eth",
+            label: "Edge Portal",
+            path: ["ZK", "ETH"],
+            rate: 0.00053
           }
         ]
       }

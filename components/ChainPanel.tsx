@@ -1,8 +1,14 @@
 "use client";
 
+import Image from "next/image";
 import { ChainConfig, TokenConfig } from "@/config/chains";
 import { TokenCard } from "./TokenCard";
 import styles from "./ChainPanel.module.css";
+
+type DeltaIndicator = {
+  amount: number;
+  direction: "in" | "out";
+};
 
 export type ChainPanelProps = {
   chain: ChainConfig;
@@ -11,6 +17,7 @@ export type ChainPanelProps = {
   onTokenDragEnd: () => void;
   onTokenDrop: (target: { chainId: string; token: TokenConfig }) => void;
   onChainDrop: (chainId: string) => void;
+  deltas: Record<string, DeltaIndicator | undefined>;
 };
 
 export function ChainPanel({
@@ -19,7 +26,8 @@ export function ChainPanel({
   onTokenDragEnd,
   onTokenDragStart,
   onTokenDrop,
-  onChainDrop
+  onChainDrop,
+  deltas
 }: ChainPanelProps) {
   return (
     <section
@@ -41,7 +49,13 @@ export function ChainPanel({
     >
       <header className={styles.header}>
         <div className={styles.icon} style={{ backgroundColor: `${chain.themeColor}33` }}>
-          {chain.icon}
+          <Image
+            src={chain.icon}
+            alt={`${chain.name} icon`}
+            width={36}
+            height={36}
+            className={styles.iconImage}
+          />
         </div>
         <div className={styles.meta}>
           <span className={styles.name}>{chain.name}</span>
@@ -55,6 +69,7 @@ export function ChainPanel({
             chainId={chain.id}
             token={token}
             balance={balances[token.id] ?? 0}
+            delta={deltas[`${chain.id}:${token.id}`]}
             onDragEnd={onTokenDragEnd}
             onDragStart={(tokenConfig) => onTokenDragStart(chain.id, tokenConfig)}
             onDropToken={() => onTokenDrop({ chainId: chain.id, token })}
