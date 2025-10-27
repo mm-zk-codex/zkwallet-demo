@@ -219,10 +219,9 @@ export default function Home() {
     if (!targetChain) {
       return;
     }
-    const potentialRoutes = dragContext.token.swapRoutes.filter((route) => {
-      const last = route.path[route.path.length - 1];
-      return last.toLowerCase() === target.token.symbol.toLowerCase();
-    });
+    const potentialRoutes = dragContext.token.swapRoutes.filter(
+      (route) => route.targetTokenId === target.token.id
+    );
     setPendingAction({
       type: "swap",
       source: dragContext,
@@ -258,6 +257,17 @@ export default function Home() {
     }
     return Number(((sourceBalance * percentage) / 100).toFixed(2));
   }, [profile, pendingAction, percentage]);
+
+  const estimatedSwapOutput = useMemo(() => {
+    if (!pendingAction || pendingAction.type !== "swap") {
+      return 0;
+    }
+    const chosenRoute =
+      pendingAction.routes.find((route) => route.id === selectedRouteId) ??
+      pendingAction.routes[0];
+    const rate = chosenRoute?.rate ?? 1;
+    return Number((currentAmount * rate).toFixed(2));
+  }, [pendingAction, selectedRouteId, currentAmount]);
 
   const executeAction = () => {
     if (!profile || !pendingAction) {
@@ -433,13 +443,31 @@ export default function Home() {
           onClose={closeModal}
         >
           <Slider label="Select percentage" value={percentage} onChange={setPercentage} />
-          <div>
-            <div style={{ fontSize: "0.85rem", color: "var(--text-muted)", fontWeight: 600 }}>
-              Estimated amount
+          <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem" }}>
+            <div>
+              <div
+                style={{ fontSize: "0.85rem", color: "var(--text-muted)", fontWeight: 600 }}
+              >
+                Sending
+              </div>
+              <div style={{ fontSize: "1.05rem", marginTop: "0.25rem" }}>
+                {currentAmount.toLocaleString(undefined, { maximumFractionDigits: 2 })}{" "}
+                {pendingAction.source.token.symbol}
+              </div>
             </div>
-            <div style={{ fontSize: "1.05rem", marginTop: "0.25rem" }}>
-              {currentAmount} {pendingAction.source.token.symbol}
-            </div>
+            {pendingAction.type === "swap" ? (
+              <div>
+                <div
+                  style={{ fontSize: "0.85rem", color: "var(--text-muted)", fontWeight: 600 }}
+                >
+                  Receiving
+                </div>
+                <div style={{ fontSize: "1.05rem", marginTop: "0.25rem" }}>
+                  {estimatedSwapOutput.toLocaleString(undefined, { maximumFractionDigits: 2 })}{" "}
+                  {pendingAction.target.token.symbol}
+                </div>
+              </div>
+            ) : null}
           </div>
 
           {pendingAction.type === "swap" ? (
@@ -456,7 +484,8 @@ export default function Home() {
                 id: "custom",
                 label: "Portal Hop",
                 path: [pendingAction.source.token.symbol, pendingAction.target.token.symbol],
-                rate: 1
+                rate: 1,
+                targetTokenId: pendingAction.target.token.id
               }]).map((route) => {
                 const isActive = route.id === selectedRouteId;
                 return (
@@ -485,7 +514,12 @@ export default function Home() {
                       {route.path.join(" → ")}
                     </span>
                     <span style={{ fontSize: "0.9rem", color: "var(--accent-strong)", fontWeight: 600 }}>
-                      1 {pendingAction.source.token.symbol} ≈ {route.rate} {pendingAction.target.token.symbol}
+                      1 {pendingAction.source.token.symbol} ≈
+                      {" "}
+                      {route.rate.toLocaleString(undefined, {
+                        maximumFractionDigits: route.rate < 1 ? 6 : 2
+                      })}{" "}
+                      {pendingAction.target.token.symbol}
                     </span>
                   </button>
                 );

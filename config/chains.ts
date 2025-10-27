@@ -3,6 +3,7 @@ export type SwapRoute = {
   label: string;
   path: string[];
   rate: number;
+  targetTokenId: string;
 };
 
 export type TokenConfig = {
@@ -47,13 +48,15 @@ export const CHAINS: ChainConfig[] = [
             id: "era-eth-weth",
             label: "Mute Switch",
             path: ["ETH", "WETH"],
-            rate: 1
+            rate: 1,
+            targetTokenId: "weth"
           },
           {
             id: "era-eth-usdc",
             label: "SyncSwap",
             path: ["ETH", "USDC"],
-            rate: 3271.42
+            rate: 3271.42,
+            targetTokenId: "usdc"
           }
         ]
       },
@@ -68,13 +71,15 @@ export const CHAINS: ChainConfig[] = [
             id: "era-weth-eth",
             label: "Velocore",
             path: ["WETH", "ETH"],
-            rate: 0.999
+            rate: 0.999,
+            targetTokenId: "eth"
           },
           {
             id: "era-weth-zk",
             label: "SpaceFi",
             path: ["WETH", "ZK"],
-            rate: 1823.4
+            rate: 1823.4,
+            targetTokenId: "zk"
           }
         ]
       },
@@ -89,13 +94,15 @@ export const CHAINS: ChainConfig[] = [
             id: "era-usdc-eth",
             label: "Curve Stable",
             path: ["USDC", "ETH"],
-            rate: 0.0003
+            rate: 0.0003,
+            targetTokenId: "eth"
           },
           {
             id: "era-usdc-meow",
             label: "SyncSwap",
             path: ["USDC", "MEOW"],
-            rate: 5120.78
+            rate: 5120.78,
+            targetTokenId: "meow"
           }
         ]
       },
@@ -110,13 +117,15 @@ export const CHAINS: ChainConfig[] = [
             id: "era-zk-eth",
             label: "Mute Switch",
             path: ["ZK", "ETH"],
-            rate: 0.00054
+            rate: 0.00054,
+            targetTokenId: "eth"
           },
           {
             id: "era-zk-meow",
             label: "SpaceFi",
             path: ["ZK", "MEOW"],
-            rate: 27.45
+            rate: 27.45,
+            targetTokenId: "meow"
           }
         ]
       },
@@ -131,7 +140,8 @@ export const CHAINS: ChainConfig[] = [
             id: "era-meow-usdc",
             label: "ClawSwap",
             path: ["MEOW", "USDC"],
-            rate: 0.00018
+            rate: 0.00018,
+            targetTokenId: "usdc"
           }
         ]
       }
@@ -154,13 +164,15 @@ export const CHAINS: ChainConfig[] = [
             id: "sophon-eth-weth",
             label: "Lynex",
             path: ["ETH", "WETH"],
-            rate: 1
+            rate: 1,
+            targetTokenId: "weth"
           },
           {
             id: "sophon-eth-zk",
             label: "Sophon Portal",
             path: ["ETH", "ZK"],
-            rate: 1876.9
+            rate: 1876.9,
+            targetTokenId: "zk"
           }
         ]
       },
@@ -175,13 +187,15 @@ export const CHAINS: ChainConfig[] = [
             id: "sophon-weth-eth",
             label: "Lynex",
             path: ["WETH", "ETH"],
-            rate: 0.999
+            rate: 0.999,
+            targetTokenId: "eth"
           },
           {
             id: "sophon-weth-usdc",
             label: "SyncSwap",
             path: ["WETH", "USDC"],
-            rate: 3268.11
+            rate: 3268.11,
+            targetTokenId: "usdc"
           }
         ]
       },
@@ -196,7 +210,8 @@ export const CHAINS: ChainConfig[] = [
             id: "sophon-usdc-eth",
             label: "Curve Stable",
             path: ["USDC", "ETH"],
-            rate: 0.00031
+            rate: 0.00031,
+            targetTokenId: "eth"
           }
         ]
       },
@@ -211,7 +226,8 @@ export const CHAINS: ChainConfig[] = [
             id: "sophon-zk-eth",
             label: "Sophon Portal",
             path: ["ZK", "ETH"],
-            rate: 0.00052
+            rate: 0.00052,
+            targetTokenId: "eth"
           }
         ]
       },
@@ -226,7 +242,8 @@ export const CHAINS: ChainConfig[] = [
             id: "sophon-meow-usdc",
             label: "ClawSwap",
             path: ["MEOW", "USDC"],
-            rate: 0.00019
+            rate: 0.00019,
+            targetTokenId: "usdc"
           }
         ]
       }
@@ -249,7 +266,8 @@ export const CHAINS: ChainConfig[] = [
             id: "abstract-eth-usdc",
             label: "Abstract Swap",
             path: ["ETH", "USDC"],
-            rate: 3270.05
+            rate: 3270.05,
+            targetTokenId: "usdc"
           }
         ]
       },
@@ -264,7 +282,8 @@ export const CHAINS: ChainConfig[] = [
             id: "abstract-weth-eth",
             label: "Abstract Swap",
             path: ["WETH", "ETH"],
-            rate: 0.999
+            rate: 0.999,
+            targetTokenId: "eth"
           }
         ]
       },
@@ -279,7 +298,8 @@ export const CHAINS: ChainConfig[] = [
             id: "abstract-usdc-eth",
             label: "Curve Stable",
             path: ["USDC", "ETH"],
-            rate: 0.0003
+            rate: 0.0003,
+            targetTokenId: "eth"
           }
         ]
       },
@@ -294,7 +314,8 @@ export const CHAINS: ChainConfig[] = [
             id: "abstract-zk-eth",
             label: "Abstract Swap",
             path: ["ZK", "ETH"],
-            rate: 0.0005
+            rate: 0.0005,
+            targetTokenId: "eth"
           }
         ]
       }
@@ -317,7 +338,8 @@ export const CHAINS: ChainConfig[] = [
             id: "edge-eth-usdc",
             label: "Edge Portal",
             path: ["ETH", "USDC"],
-            rate: 3271.88
+            rate: 3271.88,
+            targetTokenId: "usdc"
           }
         ]
       },
@@ -332,7 +354,8 @@ export const CHAINS: ChainConfig[] = [
             id: "edge-usdc-eth",
             label: "Edge Portal",
             path: ["USDC", "ETH"],
-            rate: 0.00031
+            rate: 0.00031,
+            targetTokenId: "eth"
           }
         ]
       },
@@ -347,7 +370,8 @@ export const CHAINS: ChainConfig[] = [
             id: "edge-zk-eth",
             label: "Edge Portal",
             path: ["ZK", "ETH"],
-            rate: 0.00053
+            rate: 0.00053,
+            targetTokenId: "eth"
           }
         ]
       }
