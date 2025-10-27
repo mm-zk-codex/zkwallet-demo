@@ -1,0 +1,96 @@
+.hero {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  padding: 2.5rem 2rem 1.5rem;
+  border-radius: 28px;
+  border: 2px solid rgba(99, 123, 255, 0.45);
+  background: linear-gradient(145deg, rgba(42, 51, 102, 0.8), rgba(16, 20, 42, 0.9));
+  box-shadow: 0 30px 60px rgba(7, 10, 25, 0.5);
+}
+
+.meta {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.kicker {
+  text-transform: uppercase;
+  font-size: 0.7rem;
+  letter-spacing: 0.35em;
+  color: var(--accent);
+}
+
+.title {
+  margin: 0;
+  font-size: clamp(1.6rem, 2vw + 1rem, 2.4rem);
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+}
+
+.subtitle {
+  margin: 0;
+  max-width: 40ch;
+  color: var(--text-muted);
+  font-size: 0.8rem;
+  line-height: 1.6;
+}
+
+.wallet {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+  align-items: center;
+  justify-content: space-between;
+  background: rgba(13, 17, 36, 0.8);
+  border: 1px solid rgba(107, 129, 255, 0.5);
+  padding: 1rem 1.4rem;
+  border-radius: 18px;
+}
+
+.label {
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  color: var(--text-muted);
+}
+
+.address {
+  font-size: 0.9rem;
+  font-family: "Courier New", Courier, monospace;
+  letter-spacing: 0.12em;
+  background: rgba(27, 34, 74, 0.9);
+  padding: 0.5rem 0.75rem;
+  border-radius: 12px;
+  border: 1px solid rgba(98, 241, 255, 0.3);
+}
+
+.reset {
+  background: linear-gradient(135deg, rgba(76, 222, 221, 0.9), rgba(73, 113, 255, 0.9));
+  border: none;
+  color: #0b1021;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  padding: 0.6rem 1.2rem;
+  border-radius: 14px;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.reset:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 24px rgba(76, 222, 221, 0.35);
+}
+
+@media (max-width: 800px) {
+  .hero {
+    padding: 2rem 1.5rem;
+  }
+
+  .wallet {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}

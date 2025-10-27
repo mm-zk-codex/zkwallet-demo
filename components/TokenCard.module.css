@@ -1,0 +1,51 @@
+.card {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.85rem 1rem;
+  background: rgba(24, 31, 68, 0.95);
+  border: 2px solid transparent;
+  border-radius: 16px;
+  cursor: grab;
+  user-select: none;
+  transition: transform 0.2s ease, border-color 0.2s ease;
+}
+
+.card:active {
+  cursor: grabbing;
+  transform: scale(0.98);
+}
+
+.card:hover {
+  border-color: var(--accent);
+}
+
+.avatar {
+  font-size: 1.8rem;
+  filter: drop-shadow(0 0 8px rgba(98, 241, 255, 0.35));
+}
+
+.meta {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.symbol {
+  font-weight: bold;
+  letter-spacing: 0.1em;
+  font-size: 0.8rem;
+}
+
+.name {
+  font-size: 0.6rem;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.balance {
+  font-size: 0.85rem;
+  font-weight: bold;
+  color: var(--accent-strong);
+}
