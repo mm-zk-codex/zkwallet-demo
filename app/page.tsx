@@ -344,10 +344,10 @@ export default function Home() {
         >
           <Slider label="Select percentage" value={percentage} onChange={setPercentage} />
           <div>
-            <div style={{ fontSize: "0.75rem", color: "var(--text-muted)", textTransform: "uppercase" }}>
+            <div style={{ fontSize: "0.85rem", color: "var(--text-muted)", fontWeight: 600 }}>
               Estimated amount
             </div>
-            <div style={{ fontSize: "1rem", marginTop: "0.25rem" }}>
+            <div style={{ fontSize: "1.05rem", marginTop: "0.25rem" }}>
               {currentAmount} {pendingAction.source.token.symbol}
             </div>
           </div>
@@ -356,9 +356,7 @@ export default function Home() {
             <div style={{ display: "flex", flexDirection: "column", gap: "0.75rem" }}>
               <div
                 style={{
-                  fontSize: "0.7rem",
-                  textTransform: "uppercase",
-                  letterSpacing: "0.1em",
+                  fontSize: "0.85rem",
                   color: "var(--text-muted)"
                 }}
               >
@@ -390,13 +388,13 @@ export default function Home() {
                       cursor: "pointer"
                     }}
                   >
-                    <span style={{ fontSize: "0.8rem", textTransform: "uppercase", letterSpacing: "0.12em" }}>
+                    <span style={{ fontSize: "0.95rem", fontWeight: 600 }}>
                       {route.label}
                     </span>
-                    <span style={{ fontSize: "0.7rem", color: "var(--text-muted)" }}>
+                    <span style={{ fontSize: "0.85rem", color: "var(--text-muted)" }}>
                       {route.path.join(" → ")}
                     </span>
-                    <span style={{ fontSize: "0.75rem", color: "var(--accent-strong)" }}>
+                    <span style={{ fontSize: "0.9rem", color: "var(--accent-strong)", fontWeight: 600 }}>
                       1 {pendingAction.source.token.symbol} ≈ {route.rate} {pendingAction.target.token.symbol}
                     </span>
                   </button>
@@ -413,8 +411,8 @@ export default function Home() {
               borderRadius: "16px",
               border: "none",
               padding: "0.9rem 1.2rem",
-              textTransform: "uppercase",
-              letterSpacing: "0.18em",
+              textTransform: "none",
+              letterSpacing: "0.06em",
               fontWeight: 700,
               background:
                 pendingAction.type === "deposit"

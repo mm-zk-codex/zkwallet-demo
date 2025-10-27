@@ -7,8 +7,7 @@
   display: flex;
   flex-direction: column;
   gap: 1.25rem;
-  box-shadow: 0 30px 60px rgba(6, 8, 24, 0.55);
-  backdrop-filter: blur(10px);
+  box-shadow: 0 22px 48px rgba(6, 8, 24, 0.42);
   overflow: hidden;
 }
 
@@ -32,18 +31,18 @@
 
 .title {
   margin: 0;
-  text-transform: uppercase;
-  letter-spacing: 0.18em;
-  font-size: 0.95rem;
+  text-transform: none;
+  letter-spacing: 0.08em;
+  font-size: 1rem;
   font-family: var(--heading-font);
 }
 
 .subtitle {
   margin: 0;
   color: var(--text-muted);
-  font-size: 0.8rem;
-  text-transform: uppercase;
-  letter-spacing: 0.14em;
+  font-size: 0.85rem;
+  text-transform: none;
+  letter-spacing: 0.05em;
 }
 
 .rows {
@@ -62,14 +61,14 @@
   border-radius: 18px;
   background: rgba(40, 28, 74, 0.68);
   cursor: copy;
-  transition: border-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+  transition: border-color 0.16s ease, transform 0.16s ease, box-shadow 0.16s ease;
   box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.05);
 }
 
 .exchange:hover {
   border-color: var(--accent);
-  transform: translateY(-4px);
-  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08), 0 16px 30px rgba(12, 10, 40, 0.4);
+  transform: translateY(-3px);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08), 0 14px 28px rgba(12, 10, 40, 0.35);
 }
 
 .icon {
@@ -85,14 +84,14 @@
 }
 
 .name {
-  font-size: 0.95rem;
-  letter-spacing: 0.12em;
+  font-size: 1rem;
+  letter-spacing: 0.05em;
   font-family: var(--heading-font);
-  text-transform: uppercase;
+  text-transform: none;
 }
 
 .description {
-  font-size: 0.78rem;
+  font-size: 0.85rem;
   color: var(--text-muted);
-  letter-spacing: 0.08em;
+  letter-spacing: 0.04em;
 }
