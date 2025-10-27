@@ -29,24 +29,24 @@ type DeltaIndicator = {
 
 type PendingAction =
   | {
-      type: "transfer";
-      source: DragContext;
-      targetChain: ChainConfig;
-    }
+    type: "transfer";
+    source: DragContext;
+    targetChain: ChainConfig;
+  }
   | {
-      type: "deposit";
-      source: DragContext;
-      exchange: ExchangeConfig;
-    }
+    type: "deposit";
+    source: DragContext;
+    exchange: ExchangeConfig;
+  }
   | {
-      type: "swap";
-      source: DragContext;
-      target: {
-        chain: ChainConfig;
-        token: TokenConfig;
-      };
-      routes: SwapRoute[];
+    type: "swap";
+    source: DragContext;
+    target: {
+      chain: ChainConfig;
+      token: TokenConfig;
     };
+    routes: SwapRoute[];
+  };
 
 const randomBetween = (min: number, max: number) => Math.random() * (max - min) + min;
 
@@ -372,8 +372,7 @@ export default function Home() {
         }
       );
       setFeedback(
-        `Swapped ${amount.toFixed(2)} ${source.token.symbol} for ${(amount * effectiveRate).toFixed(2)} ${
-          target.token.symbol
+        `Swapped ${amount.toFixed(2)} ${source.token.symbol} for ${(amount * effectiveRate).toFixed(2)} ${target.token.symbol
         } via ${routeLabel}.`
       );
     }
@@ -391,7 +390,7 @@ export default function Home() {
     const fresh = createRandomProfile();
     setProfile(fresh);
     persistProfile(fresh);
-    setFeedback("New adventurer wallet minted.");
+    setFeedback("New user wallet minted.");
   };
 
   return (
@@ -430,15 +429,15 @@ export default function Home() {
             pendingAction.type === "transfer"
               ? `Bridge ${pendingAction.source.token.symbol}`
               : pendingAction.type === "deposit"
-              ? `Send to ${pendingAction.exchange.name}`
-              : `Swap ${pendingAction.source.token.symbol}`
+                ? `Send to ${pendingAction.exchange.name}`
+                : `Swap ${pendingAction.source.token.symbol}`
           }
           description={
             pendingAction.type === "transfer"
               ? `Send ${pendingAction.source.token.symbol} from ${pendingAction.source.chain.name} to ${pendingAction.targetChain.name}.`
               : pendingAction.type === "deposit"
-              ? `Simulate depositing ${pendingAction.source.token.symbol} to ${pendingAction.exchange.name}.`
-              : `Select a route to convert ${pendingAction.source.token.symbol} into ${pendingAction.target.token.symbol}.`
+                ? `Simulate depositing ${pendingAction.source.token.symbol} to ${pendingAction.exchange.name}.`
+                : `Select a route to convert ${pendingAction.source.token.symbol} into ${pendingAction.target.token.symbol}.`
           }
           onClose={closeModal}
         >
